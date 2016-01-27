@@ -1,57 +1,64 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 25 08:36:50 2016
-
-@author: sev_user
-"""
 from django.db import models
+from django.utils.encoding import python_2_unicode_compatible
 
-        
-class ClassManager(models.Manager):
+# Create your models here.
 
-    def get_students_with_Address2(self):
-        from django.db import connection
-        cursor = connection.cursor()
-        cursor.execute("""SELECT * FROM students_student WHERE id =1 """)
-        result_list = []
-        for row in cursor.fetchall():
-            p = self.model(id = row[0], name = row[1], code = row[2], address = row[3], joined_date = row[4], average_score = row[5], email = row[6] )
-            result_list.append(p)
-        return result_list
-   
-     
-
-class Course(models.Model):
-    name = models.CharField(max_length=100)
-    code = models.IntegerField()
+@python_2_unicode_compatible
+class Department(models.Model):
+    
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length = 100)
+    code = models.PositiveIntegerField(unique= True)
     
     def __str__(self):
         return self.name
-        
 
-class Student(models.Model):
-    name = models.CharField(max_length=100)
-    code = models.IntegerField()
-    address = models.CharField(max_length=200)
+@python_2_unicode_compatible
+class Subject(models.Model):
+    
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length = 100)
+    code = models.PositiveIntegerField(unique=True)
+    addr = models.CharField(max_length = 100)
+    department = models.ForeignKey(Department, on_delete = models.CASCADE)   
+    teacher = models.ForeignKey('Teacher', on_delete = models.CASCADE)
+    
+    def __str__(self):
+        return self.name
+
+@python_2_unicode_compatible
+class People(models.Model):
+
+    id = models.AutoField(primary_key = True)
+    name = models.CharField(max_length =100)
+    code = models.PositiveIntegerField(unique=True)
+    addr = models.CharField(max_length = 200)
+    email = models.EmailField()
     joined_date = models.DateField()
-    average_score = models.FloatField()
-    email = models.EmailField(default = 'user@gmail.com')
-    objects = ClassManager()
-    
-    class Meta:
-        '''Order by joined_date descending '''
-        ordering = ['-joined_date']
-    
-    def __str__(self):
-        return self.name
-        
-    
-class Classroom(models.Model):
-    student = models.ManyToManyField(Student)
-    course = models.ForeignKey(Course, on_delete = models.CASCADE)
-    name = models.CharField(max_length=100)
-    code = models.IntegerField()
-    address = models.CharField(max_length=200)
 
+    class Meta:
+        abstract = True
+        
     def __str__(self):
         return self.name
+
+
+class Student(People):
+    
+    average_score = models.FloatField()
+    subjects = models.ManyToManyField(Subject, through = 'Score', related_name = "%(app_label)s_%(class)s_related")
+    
+    def get_score(self):
+        return [self.average_score]
+    
+class Teacher(People):
+    
+    salary = models.PositiveIntegerField(default = 100)
+    #classroom = models.OneToOneField(Classroom, on_delete = models.CASCADE, related_name = '%(class)s_students_teacher')
+
+class Score(models.Model):
+    
+    student = models.ForeignKey(Student, on_delete = models.CASCADE)
+    subject = models.ForeignKey(Subject, on_delete = models.CASCADE)    
+    middle_score = models.FloatField(default=0)
+    final_score = models.FloatField(default=0)

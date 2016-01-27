@@ -11,45 +11,79 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Classroom',
+            name='Department',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=100)),
-                ('code', models.IntegerField()),
-                ('address', models.CharField(max_length=200)),
+                ('code', models.PositiveIntegerField(unique=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Course',
+            name='Score',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=100)),
-                ('code', models.IntegerField()),
+                ('middle_score', models.FloatField(default=0)),
+                ('final_score', models.FloatField(default=0)),
             ],
         ),
         migrations.CreateModel(
             name='Student',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('id', models.AutoField(serialize=False, primary_key=True)),
                 ('name', models.CharField(max_length=100)),
-                ('code', models.IntegerField()),
-                ('address', models.CharField(max_length=200)),
+                ('code', models.PositiveIntegerField(unique=True)),
+                ('addr', models.CharField(max_length=200)),
+                ('email', models.EmailField(max_length=254)),
                 ('joined_date', models.DateField()),
                 ('average_score', models.FloatField()),
-                ('email', models.EmailField(default=b'user@gmail.com', max_length=254)),
             ],
             options={
-                'ordering': ['-joined_date'],
+                'abstract': False,
+            },
+        ),
+        migrations.CreateModel(
+            name='Subject',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True)),
+                ('name', models.CharField(max_length=100)),
+                ('code', models.PositiveIntegerField(unique=True)),
+                ('addr', models.CharField(max_length=100)),
+                ('department', models.ForeignKey(to='students.Department')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Teacher',
+            fields=[
+                ('id', models.AutoField(serialize=False, primary_key=True)),
+                ('name', models.CharField(max_length=100)),
+                ('code', models.PositiveIntegerField(unique=True)),
+                ('addr', models.CharField(max_length=200)),
+                ('email', models.EmailField(max_length=254)),
+                ('joined_date', models.DateField()),
+                ('salary', models.PositiveIntegerField(default=100)),
+            ],
+            options={
+                'abstract': False,
             },
         ),
         migrations.AddField(
-            model_name='classroom',
-            name='course',
-            field=models.ForeignKey(to='students.Course'),
+            model_name='subject',
+            name='teacher',
+            field=models.ForeignKey(to='students.Teacher'),
         ),
         migrations.AddField(
-            model_name='classroom',
+            model_name='student',
+            name='subjects',
+            field=models.ManyToManyField(related_name='students_student_related', through='students.Score', to='students.Subject'),
+        ),
+        migrations.AddField(
+            model_name='score',
             name='student',
-            field=models.ManyToManyField(to='students.Student'),
+            field=models.ForeignKey(to='students.Student'),
+        ),
+        migrations.AddField(
+            model_name='score',
+            name='subject',
+            field=models.ForeignKey(to='students.Subject'),
         ),
     ]
