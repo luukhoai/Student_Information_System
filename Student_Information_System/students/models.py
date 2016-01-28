@@ -1,46 +1,47 @@
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
-
+from students.managers.subjectManager import SubjectManager
 # Create your models here.
 
 @python_2_unicode_compatible
 class Department(models.Model):
     
-    id = models.AutoField(primary_key = True)
-    name = models.CharField(max_length = 100)
-    code = models.PositiveIntegerField(unique= True)
+    dept_id = models.AutoField(primary_key = True)
+    dept_name = models.CharField(max_length = 100)
+    dept_code = models.PositiveIntegerField(unique= True)
     
     def __str__(self):
-        return self.name
+        return self.dept_name
 
 @python_2_unicode_compatible
 class Subject(models.Model):
     
-    id = models.AutoField(primary_key = True)
-    name = models.CharField(max_length = 100)
-    code = models.PositiveIntegerField(unique=True)
-    addr = models.CharField(max_length = 100)
+    sub_id = models.AutoField(primary_key = True)
+    sub_name = models.CharField(max_length = 100)
+    sub_code = models.PositiveIntegerField(unique=True)
+    sub_addr = models.CharField(max_length = 100)
     department = models.ForeignKey(Department, on_delete = models.CASCADE)   
     teacher = models.ForeignKey('Teacher', on_delete = models.CASCADE)
+    subjects = SubjectManager()
     
     def __str__(self):
-        return self.name
+        return self.sub_name
 
 @python_2_unicode_compatible
 class People(models.Model):
 
-    id = models.AutoField(primary_key = True)
-    name = models.CharField(max_length =100)
-    code = models.PositiveIntegerField(unique=True)
-    addr = models.CharField(max_length = 200)
-    email = models.EmailField()
+    per_id = models.AutoField(primary_key = True)
+    per_name = models.CharField(max_length =100)
+    per_code = models.PositiveIntegerField(unique=True)
+    per_addr = models.CharField(max_length = 200)
+    per_email = models.EmailField()
     joined_date = models.DateField()
 
     class Meta:
         abstract = True
         
     def __str__(self):
-        return self.name
+        return self.per_name
 
 
 class Student(People):
