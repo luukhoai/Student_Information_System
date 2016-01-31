@@ -1,0 +1,5 @@
+{% for dept in department_list %}
+<h1>{{dept.dept_name}}</h1>
+<a href= "{% url 'students:subjectindept' dept.dept_id %}">Subjects</a>
+<a href= "{% url 'students:departmentdetail' dept.dept_id %}">Detail </a>
+{% endfor %}

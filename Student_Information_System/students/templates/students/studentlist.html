@@ -1,3 +1,4 @@
 {% for student in student_list %}
-<li>{{student.per_id}} -- {{student.per_name}} -- {{student.per_code}} </li>
+<h1>{{student.per_name}}</h1>
+<a href= "{% url 'students:studentdetail' student.per_id %}">Detail </a>
 {% endfor %}

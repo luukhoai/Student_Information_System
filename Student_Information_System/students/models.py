@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from students.managers.subjectManager import SubjectManager
+from students.managers.peopleManager import PeopleManager
 # Create your models here.
 
 @python_2_unicode_compatible
@@ -36,6 +37,7 @@ class People(models.Model):
     per_addr = models.CharField(max_length = 200)
     per_email = models.EmailField()
     joined_date = models.DateField()
+    objects = PeopleManager()
 
     class Meta:
         abstract = True
