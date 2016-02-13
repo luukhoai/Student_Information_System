@@ -1,0 +1,21 @@
+{% extends "students/base.html" %}
+
+{% block sidebar %}
+    <ul>
+        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+        <li><a href="{% url 'students:departmentlist' %}">Departments</a></li>
+        <li><a href="{% url 'students:subjectlist' %}">Subjects</a></li>
+        <li><a href="{% url 'students:studentlist' %}">Students</a></li>
+        <li><a href="{% url 'students:student_create' %}">Create</a></li>
+    </ul>
+{% endblock%}
+
+{% block content %}
+<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}
+    <ul>
+    {{form.as_p}}
+    </ul>
+    <input type="submit" name="Submit" value="Save"/>
+</form>
+
+{% endblock %}

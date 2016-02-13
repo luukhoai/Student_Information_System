@@ -1,5 +1,11 @@
+{% extends "students/base.html" %}
+{% load staticfiles %}
+{% block content %}
+
 {% for sub in subject_list %}
 <h1>{{sub.sub_name}}</h1>
 <a href= "{% url 'students:studentsinsubject' sub.sub_id %}">Students </a>
 <a href= "{% url 'students:subjectdetail' sub.sub_id %}">Detail </a>
 {% endfor %}
+
+{% endblock %}

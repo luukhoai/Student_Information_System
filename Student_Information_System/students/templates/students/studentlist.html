@@ -1,4 +1,35 @@
+{% extends "students/base.html" %}
+{% load staticfiles %}
+
+{% block sidebar %}
+    <ul>
+        <li><a href="{% url 'accounts:logout' %}">Logout</a></li>
+        <li><a href="{% url 'students:departmentlist' %}">Departments</a></li>
+        <li><a href="{% url 'students:subjectlist' %}">Subjects</a></li>
+        <li><a href="{% url 'students:studentlist' %}">Students</a></li>
+        <li><a href="{% url 'students:student_create' %}">Create</a></li>
+    </ul>
+
+    <h3>Search</h3>{% csrf_token %}
+    <form action="{% url 'students:search' %}" method="post">{% csrf_token %}
+    <input type="text" id="search" name="search"/>
+    <input type="submit" value="go">
+    <ul id="search-results">
+
+    </ul>
+</form>
+{% endblock%}
+
+
+
+
+{% block content %}
+
 {% for student in student_list %}
 <h1>{{student.per_name}}</h1>
-<a href= "{% url 'students:studentdetail' student.per_id %}">Detail </a>
+<a href="{% url 'students:student_update' student.per_id %}">Update</a>
+<a href="{% url 'students:student_delete' student.per_id %}">Delete</a>
+
 {% endfor %}
+
+{% endblock %}

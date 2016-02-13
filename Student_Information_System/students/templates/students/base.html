@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %} My Base Template {% endblock %}</title>
+
+    <link rel="stylesheet" type="text/css" href="{% static 'statics/css/default.css' %}"/>
+
+    <script src="{% static 'statics/is.jquery-2.2.0.min.js' %}"></script>
+    <script src="{% static 'statics/js.ajax.js' %}"></script>
+
+</head>
+
+
+
+<body>
+    <div id="page">
+
+        <div id="sidebar">
+            {% block sidebar %}
+            <ul>
+                <li><a href="{% url 'accounts:login' %}">Log in</a></li>
+                <li><a href="{% url 'students:departmentlist' %}">Departments</a></li>
+                <li><a href="{% url 'students:subjectlist' %}">Subjects</a></li>
+                <li><a href="{% url 'students:studentlist' %}">Students</a></li>
+                <li><a href="{% url 'students:student_create' %}">Create</a></li>
+            </ul>
+
+            {% endblock %}
+        </div>
+
+        <div id="content">
+            {% block content %}
+            <img src="{% static 'statics/pictures/images.jpeg' %}"/>
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>

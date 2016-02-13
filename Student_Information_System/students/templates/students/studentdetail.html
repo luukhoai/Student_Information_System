@@ -1,1 +1,9 @@
+{% extends "students/base.html" %}
+{% load staticfiles %}
+{% block content %}
+
 <li>{{student.per_id}} -- {{student.per_name}} -- {{student.per_code}} -- {{student.per_addr}} -- {{student.per_email}} -- {{student.joined_date}} -- {{student.average_score}}</li>
+{% if student.picture %}
+<p><img src="{% static 'statics/pictures/' %}{{student.picture}}"/></p>
+{% endif %}
+{% endblock %}

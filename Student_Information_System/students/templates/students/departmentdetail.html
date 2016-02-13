@@ -1,1 +1,12 @@
+{% extends "students/base.html" %}
+{% load staticfiles %}
+{% block content %}
+
 <h1>{{department.dept_id}} -- {{department.dept_name}} -- {{department.dept_code}} </h1>
+<ul>
+    {% for subject in department.subject_set.all %}
+        <li>{{subject.sub_name}}</li>
+    {% endfor %}
+</ul>
+
+{% endblock %}
